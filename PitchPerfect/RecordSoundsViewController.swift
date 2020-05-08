@@ -18,12 +18,23 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var stopRecordButton: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//    MARK: The State of the Application
+    enum State {
+        case recording, notRecording;
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         stopRecordButton.isEnabled = false;
+    }
+// MARK: UI configration
+    func configureUI(_ recordingState: State){
+        switch recordingState {
+        case .recording:
+            recording();
+        case .notRecording:
+            notRecording();
+        }
     }
 // MARK: Start recording
     @IBAction func recordAudio(_ sender: Any) {
@@ -31,7 +42,10 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         recordingLabel.text = "Recording in progress!";
         switchState(of: recordButton);
         switchState(of: stopRecordButton);
-        
+        configureUI(.recording)
+    }
+//    MARK: Recording actions
+    func recording(){
         let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask, true)[0] as String
         let recordingName = "recordedVoice.wav"
         let pathArray = [dirPath, recordingName]
@@ -41,9 +55,17 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         print(filePath ?? "There is no path");
 
         let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+        do {
+            try session.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.defaultToSpeaker)
+        } catch {
+            print("Unexpected error At setCategory: \(error) <<<<<<<<<<<");
+        }
 
-        try! audioRecorder = AVAudioRecorder(url: filePath!, settings: [:]);
+        do {
+            try audioRecorder = AVAudioRecorder(url: filePath!, settings: [:]);
+        } catch {
+            print("Unexpected error At filePath: \(error) <<<<<<<<<<<");
+        }
         audioRecorder.delegate = self;
         audioRecorder.isMeteringEnabled = true
         audioRecorder.prepareToRecord()
@@ -55,10 +77,18 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         recordingLabel.text = "Recording is NOT in progress!";
         switchState(of: recordButton);
         switchState(of: stopRecordButton);
+        configureUI(.notRecording);
         
+    }
+// MARK:   Not Recording actions
+    func notRecording(){
         audioRecorder.stop()
         let audioSession = AVAudioSession.sharedInstance()
-        try! audioSession.setActive(false)
+        do {
+            try audioSession.setActive(false)
+        } catch  {
+            print("Unexpected error At setActive(false): \(error) <<<<<<<<<<<");
+        }
     }
     
     

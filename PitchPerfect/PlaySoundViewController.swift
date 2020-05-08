@@ -14,7 +14,7 @@ class PlaySoundViewController: UIViewController {
     var recordedAudioURL: URL!;
     
 
-    @IBOutlet weak var slowButton: UILabel!
+    @IBOutlet weak var slowButton: UIButton!
 
     @IBOutlet weak var fastButton: UIButton!
     @IBOutlet weak var echoButton: UIButton!
@@ -35,6 +35,19 @@ class PlaySoundViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated);
         configureUI(.notPlaying);
+        
+        setUpScaleAspectForButtons()
+        
+    }
+    
+    func setUpScaleAspectForButtons(){
+        slowButton.imageView?.contentMode = .scaleAspectFit;
+        fastButton.imageView?.contentMode = .scaleAspectFit;
+        highPitchButton.imageView?.contentMode = .scaleAspectFit;
+        lowPitchButton.imageView?.contentMode = .scaleAspectFit;
+        stopButton.imageView?.contentMode = .scaleAspectFit;
+        reverbButton.imageView?.contentMode = .scaleAspectFit;
+        echoButton.imageView?.contentMode = .scaleAspectFit;
     }
   
     @IBAction func playSoundForButton(_ sender: UIButton){
@@ -63,7 +76,7 @@ class PlaySoundViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad();
         setupAudio();
     }
 
