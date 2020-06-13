@@ -5,7 +5,7 @@ iOS app that records sounds and plays it back with sounds effects.
 You will make an iPhone app that will allow users to record their voice and will then modulate the recorded audio to sound like a Chipmunk or Darth Vader. This app will also let the user speed up or slow down the rate of playback, and experience fun echo and reverb effects.
 
 
-# What I learned in this project
+# What I applied in this project
 
 > - Create a new project from existing iOS app templates
 > - Add buttons, images, labels and create user interfaces for the app using the Storyboard
